@@ -17,12 +17,10 @@ def test_vector_cosine_similarity(spark):
 
 def test_vector_cosine_similarity_null_cases(spark):
     assert (
-        spark.sql("SELECT vector_cosine_similarity(CAST(NULL AS ARRAY<FLOAT>), array(1.0F, 2.0F))").first()[0]
-        is None
+        spark.sql("SELECT vector_cosine_similarity(CAST(NULL AS ARRAY<FLOAT>), array(1.0F, 2.0F))").first()[0] is None
     )
     assert (
-        spark.sql("SELECT vector_cosine_similarity(array(1.0F, 2.0F), CAST(NULL AS ARRAY<FLOAT>))").first()[0]
-        is None
+        spark.sql("SELECT vector_cosine_similarity(array(1.0F, 2.0F), CAST(NULL AS ARRAY<FLOAT>))").first()[0] is None
     )
     assert (
         spark.sql(
@@ -39,16 +37,9 @@ def test_vector_cosine_similarity_null_cases(spark):
 
 def test_vector_cosine_similarity_extreme_values(spark):
     assert math.isnan(
-        spark.sql(
-            "SELECT vector_cosine_similarity(array(3.0e19F, 4.0e19F), array(3.0e19F, 4.0e19F))"
-        ).first()[0]
+        spark.sql("SELECT vector_cosine_similarity(array(3.0e19F, 4.0e19F), array(3.0e19F, 4.0e19F))").first()[0]
     )
-    assert (
-        spark.sql(
-            "SELECT vector_cosine_similarity(array(1.0e-23F, 0.0F), array(1.0e-23F, 0.0F))"
-        ).first()[0]
-        is None
-    )
+    assert spark.sql("SELECT vector_cosine_similarity(array(1.0e-23F, 0.0F), array(1.0e-23F, 0.0F))").first()[0] is None
     assert math.isnan(
         spark.sql("SELECT vector_cosine_similarity(array(float('inf'), 1.0F), array(1.0F, 1.0F))").first()[0]
     )
